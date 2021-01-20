@@ -12,7 +12,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import firebase from 'firebase';
 
 const useStyles = makeStyles((theme) => ({
@@ -39,6 +39,12 @@ export function SignUp() {
     const classes = useStyles();
     const dispatch = useDispatch();
 
+    if (useSelector((state) => state.currentUserUid) != null) {
+        dispatch({
+            type: 'LOGIN'
+        })
+    }
+
     //Redux toggle
 
     let signInToggle = () => {
@@ -64,11 +70,6 @@ export function SignUp() {
                         currentUserUid: cred.user.uid
                     });
                 })
-                .then(
-                    dispatch({
-                        type: 'LOGIN'
-                    })
-                )
                 .catch((Error) => {
                     window.alert("Error: user info previously created");
                 });

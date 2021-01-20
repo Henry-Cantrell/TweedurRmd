@@ -12,8 +12,8 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { useDispatch } from 'react-redux'
-import firebase from 'firebase'
+import { useDispatch, useSelector} from 'react-redux';
+import firebase from 'firebase';
 
 function Copyright() {
     return (
@@ -61,9 +61,16 @@ export function SignIn() {
         })
     }
 
+    if (useSelector((state) => state.currentUserUid) != null) {
+        dispatch({
+            type:'LOGIN'
+        })
+    }
+
     //Firebase func for logging in user
 
-    let userLogin = (e) => {
+    let UserLogin = (e) => {
+        const currentUserUid = (state) => state.currentUserUid;
         e.preventDefault();
         const loginEmail = document.querySelector("#email").value;
         const loginPassword = document.querySelector("#password").value;
@@ -72,20 +79,14 @@ export function SignIn() {
             .signInWithEmailAndPassword(loginEmail, loginPassword)
             .then((cred) => {
                 dispatch({
-                    type: 'CURRENT_USER_UID_SEND',
+                    type: "CURRENT_USER_UID_SEND",
                     currentUserUid: cred.user.uid,
                 });
             })
-            .then(
-                dispatch({
-                    type: 'LOGIN'
-                })
-            )
             .catch((Error) => {
                 window.alert("Error: incorrect username or password");
             });
-    }
-
+    };
 
     return (
         <Container component="main" maxWidth="xs">
@@ -95,7 +96,7 @@ export function SignIn() {
                 <Typography component="h1" variant="h5">
                     Sign in
         </Typography>
-                <form className={classes.form} onSubmit={ userLogin } noValidate>
+                <form className={classes.form} onSubmit={ UserLogin } noValidate>
                     <TextField
                         variant="outlined"
                         margin="normal"

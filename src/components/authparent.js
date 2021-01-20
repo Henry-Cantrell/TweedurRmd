@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { SignIn } from "./preauth/signinpage";
 import { SignUp } from "./preauth/signuppage";
+import { PermanentDrawerLeft } from './postauth/postauthparent'
 
 export function AuthParent() {
     const userAuthStatus = useSelector((state) => state.userLoginStatus);
@@ -14,6 +15,6 @@ export function AuthParent() {
     } else if (userAuthStatus === "loggedOut" && signPageToggle === "SignUp") {
         return <SignUp />;
     } else if (userAuthStatus === "loggedIn") {
-        return null;
+        return <PermanentDrawerLeft />;
     }
 }
